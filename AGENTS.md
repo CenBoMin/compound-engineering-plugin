@@ -5,7 +5,6 @@
 此外还包含：
 
 - 将插件转换为多种智能体平台格式的 Bun/TypeScript CLI
-- `plugins/` 下的其他插件，例如 `coding-tutor`
 - CLI、市场和插件的共享发布与元数据基础设施
 
 `AGENTS.md` 是仓库的权威指令文件。根目录的 `CLAUDE.md` 仅作为兼容性垫片，供仍会查找它的工具和转换使用。
@@ -38,7 +37,7 @@ bun run release:validate  # 检查插件/市场一致性
 - **合并策略：** 对 `main` 的所有更改都通过 PR 进行。不允许直接推送和直接合并；`main` 上的分支保护通过要求 `test` 状态检查通过来强制执行。直接路径会绕过 `release:validate`、测试套件和 PR 标题验证——过去的直接合并曾导致版本漂移，需要多 PR 恢复（参见 `docs/solutions/workflow/release-please-version-drift-recovery.md`）。
 - **安全性：** 不要删除或覆盖用户数据。避免破坏性命令。
 - **测试：** 在更改影响解析、转换或输出后运行 `bun test`。
-- **版本管理：** 发布由发布自动化准备，而非正常的功能 PR。仓库现在有多个发布组件（`cli`、`compound-engineering`、`coding-tutor`、`marketplace`）。GitHub 发布 PR 和 GitHub Releases 是新版本发布说明的权威表面；根目录 `CHANGELOG.md` 只是指向该历史的指针。使用 `feat:` 和 `fix:` 等惯用标题，以便发布自动化能分类变更意图，但在日常 PR 中不要手动调整发布拥有的版本，也不要手动编写发布说明。
+- **版本管理：** 发布由发布自动化准备，而非正常的功能 PR。仓库现在有多个发布组件（`cli`、`compound-engineering`、`marketplace`）。GitHub 发布 PR 和 GitHub Releases 是新版本发布说明的权威表面；根目录 `CHANGELOG.md` 只是指向该历史的指针。使用 `feat:` 和 `fix:` 等惯用标题，以便发布自动化能分类变更意图，但在日常 PR 中不要手动调整发布拥有的版本，也不要手动编写发布说明。
 - **关联版本（cli + compound-engineering）：** `linked-versions` release-please 插件保持 `cli` 和 `compound-engineering` 版本一致。这是有意设计的——它简化了 CLI 及其 shipped 插件的版本跟踪。一个后果是：只有插件更改的发布仍然会提升 CLI 版本（反之亦然）。当强制同步提升时，`linked-versions` 会覆盖 `exclude-paths` 的正常排除逻辑，因此 CLI changelog 可能包含通常会被过滤的提交。这是已知的 upstream release-please 限制，不是配置错误。不要将关联版本提升标记为不必要。
 - **输出路径：**
   - **Zed（首要平台）**：技能树安装在 `<project>/.agents/skills/<name>/`（项目本地）或 `~/.agents/skills/<name>/`（用户级）。SKILL.md 及 references/ 必须自包含在同一目录下，禁止跨目录引用。
@@ -63,7 +62,7 @@ bun run release:validate  # 检查插件/市场一致性
 
 ```
 src/              CLI 入口点、解析器、转换器、目标写入器
-plugins/          插件工作区（compound-engineering、coding-tutor）
+plugins/          插件工作区（compound-engineering）
 .agents/skills/   Zed 技能树（当前首要平台的核心交付物）
 .claude-plugin/   Claude 市场目录元数据
 tests/            转换器、写入器和 CLI 测试 + 固定装置
@@ -79,8 +78,6 @@ CONCEPTS.md       共享领域词汇（项目特定术语的词汇表）
 - `.agents/skills/` 下的 Zed 技能树
 - `.claude-plugin/` 下的 Claude 市场目录
 - `src/` 和 `package.json` 中的转换器/安装 CLI
-- 其他插件，如 `plugins/coding-tutor/`
-
 不要假设仓库更改"只是 CLI"或"只是插件"，而不检查哪些表面拥有受影响的文件。
 
 ## 插件维护
@@ -130,7 +127,7 @@ cat plugins/compound-engineering/.claude-plugin/plugin.json | jq .
 
 - **前缀基于意图，而非文件类型。** 使用惯用前缀（`feat:`、`fix:`、`docs:`、`refactor:` 等），但按更改所做的内容分类，而非文件扩展名。`plugins/*/skills/`、`plugins/*/agents/` 和 `.claude-plugin/` 下的文件即使它们是 Markdown 或 JSON，也是产品代码。将 `docs:` 保留给唯一目的是文档的文件（`README.md`、`docs/`、`CHANGELOG.md`）。
 - **类型选择——按意图分类，而非差异形状。** 在 `fix:` 和 `feat:` 都可能适用的情况下，默认使用 `fix:`：修复破坏或缺失行为的更改是 `fix:`，即使通过添加代码实现，且净增加不会将修复转变为 `feat:`。当其他惯用类型（`chore:`、`refactor:`、`docs:`、`perf:`、`test:`、`ci:`、`build:`、`style:`）更精确地描述更改时，保留它们作为主要类型。启发式方法：如果您今天可以编写的回归测试在更改之前会失败，那就是 `fix:`。用户可以针对特定更改覆盖此默认值。
-- **包含组件范围。** 范围在 changelog 中逐字出现。选择最窄的有用标签：技能/智能体名称（`document-review`、`learnings-researcher`）、插件或 CLI 区域（`coding-tutor`、`cli`），或跨领域时使用共享区域（`review`、`research`、`converters`）。永远不要使用 `compound-engineering`——它是整个插件，对读者没有任何信息。仅在没有单个标签增加清晰度时才省略范围。
+- **包含组件范围。** 范围在 changelog 中逐字出现。选择最窄的有用标签：技能/智能体名称（`document-review`、`learnings-researcher`）、插件或 CLI 区域（`cli`），或跨领域时使用共享区域（`review`、`research`、`converters`）。永远不要使用 `compound-engineering`——它是整个插件，对读者没有任何信息。仅在没有单个标签增加清晰度时才省略范围。
 - **未经明确用户确认，不要使用 `!` 或 `BREAKING CHANGE:` 页脚。** 这些标记会触发 release-please 的自动主版本提升——即使用户可能不想要，即使更改在技术上是破坏性的。如果更改看起来是破坏性的，向用户说明，让他们决定是否应用该标记。
 
 ## 添加新的目标提供商

@@ -1,5 +1,5 @@
 ---
-status: active
+status: completed
 date: 2026-06-15
 type: fix
 title: "fix: Repair and complete the Zed adaptation of ce-compound"

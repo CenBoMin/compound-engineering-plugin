@@ -352,6 +352,16 @@ When all Phase 2 tasks are complete and execution transitions to quality check, 
    - Testing notes (tests added/modified, manual testing performed)
    - Any "Known Residuals" accepted in the Residual Work Gate
 
+3.5. **Consider learning capture**
+
+    After the PR is open, assess whether the work produced a non-obvious lesson worth compounding.
+
+    - **Skip silently** when the work was purely additive (straightforward feature) with no surprises
+    - **Offer neutrally** when the work involved an unexpected discovery, non-trivial debugging, or a pattern worth remembering
+    - **Lean into the offer** when the fix revealed a wrong assumption about a shared dependency, or a migration other areas will repeat
+
+    When offering, present as a numbered option: "1) Capture this learning with `/ce-compound` — 2) Skip". If accepted, run `/ce-compound`.
+
 4. **Notify User**
    - Summarize what was completed
    - Link to PR (if one was created)

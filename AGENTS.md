@@ -41,7 +41,7 @@ bun run release:validate  # 检查插件/市场一致性
 - **版本管理：** 发布由发布自动化准备，而非正常的功能 PR。仓库现在有多个发布组件（`cli`、`compound-engineering`、`coding-tutor`、`marketplace`）。GitHub 发布 PR 和 GitHub Releases 是新版本发布说明的权威表面；根目录 `CHANGELOG.md` 只是指向该历史的指针。使用 `feat:` 和 `fix:` 等惯用标题，以便发布自动化能分类变更意图，但在日常 PR 中不要手动调整发布拥有的版本，也不要手动编写发布说明。
 - **关联版本（cli + compound-engineering）：** `linked-versions` release-please 插件保持 `cli` 和 `compound-engineering` 版本一致。这是有意设计的——它简化了 CLI 及其 shipped 插件的版本跟踪。一个后果是：只有插件更改的发布仍然会提升 CLI 版本（反之亦然）。当强制同步提升时，`linked-versions` 会覆盖 `exclude-paths` 的正常排除逻辑，因此 CLI changelog 可能包含通常会被过滤的提交。这是已知的 upstream release-please 限制，不是配置错误。不要将关联版本提升标记为不必要。
 - **输出路径：**
-  - **Zed（首要平台）**：技能树安装在 `<root>/skills/<name>/`，其中 `<root>` 为项目本地 `.agents` 或用户级 Zed 配置目录。SKILL.md 及 references/ 必须自包含在同一目录下，禁止跨目录引用。
+  - **Zed（首要平台）**：技能树安装在 `<project>/.agents/skills/<name>/`（项目本地）或 `~/.agents/skills/<name>/`（用户级）。SKILL.md 及 references/ 必须自包含在同一目录下，禁止跨目录引用。
   - **OpenCode（其他平台）**：输出保持在 `opencode.json` 和 `.opencode/{agents,skills,plugins}`。命令位于 `~/.config/opencode/commands/<name>.md`；`opencode.json` 是深度合并的（绝不整体覆盖）。
   - **通用规则**：转换器生产的平台输出必须严格匹配目标平台的目录布局和合并语义，不得混用平台路径约定。
 - **临时空间：** 默认使用操作系统临时目录。仅在明确符合以下规则时使用 `.context/`。
@@ -64,6 +64,7 @@ bun run release:validate  # 检查插件/市场一致性
 ```
 src/              CLI 入口点、解析器、转换器、目标写入器
 plugins/          插件工作区（compound-engineering、coding-tutor）
+.agents/skills/   Zed 技能树（当前首要平台的核心交付物）
 .claude-plugin/   Claude 市场目录元数据
 tests/            转换器、写入器和 CLI 测试 + 固定装置
 docs/             需求、计划、解决方案和目标规格
@@ -75,6 +76,7 @@ CONCEPTS.md       共享领域词汇（项目特定术语的词汇表）
 本仓库的更改可能影响以下一个或多个表面：
 
 - `plugins/compound-engineering/` 下的 `compound-engineering`
+- `.agents/skills/` 下的 Zed 技能树
 - `.claude-plugin/` 下的 Claude 市场目录
 - `src/` 和 `package.json` 中的转换器/安装 CLI
 - 其他插件，如 `plugins/coding-tutor/`
@@ -92,6 +94,7 @@ CONCEPTS.md       共享领域词汇（项目特定术语的词汇表）
 - 在移除技能、智能体或命令时，将其名称添加到两个清理注册表中，以便在升级时清理陈旧的扁平安装产物：
   - `src/utils/legacy-cleanup.ts` 中的 `STALE_SKILL_DIRS` / `STALE_AGENT_NAMES` / `STALE_PROMPT_FILES`
   - `src/data/plugin-legacy-artifacts.ts` 中的 `EXTRA_LEGACY_ARTIFACTS_BY_PLUGIN["compound-engineering"]`
+- 当新增或移除 `.agents/skills/` 下的 Zed 技能时，同步更新根目录 `README.md` 中的技能总览表与目录树。
 
 有用的验证命令：
 
@@ -107,7 +110,7 @@ cat plugins/compound-engineering/.claude-plugin/plugin.json | jq .
 
 ### Zed 平台验证
 
-- **Zed skill 启用平台中立路径前，先完成 Zed 目录完整性校验**：检查 frontmatter `target: zed`、references 目录完整性、无旧平台路径残留。
+- **Zed 目录完整性校验**：检查 frontmatter `target: zed`、references 目录完整性、无旧平台路径残留。
 - **Zed 下通过 `spawn_agent` 实际触发试跑**：在 Zed 内手动加载 skill 并执行，确认子代理被正确触发、输出按预期落盘。
 - **不依赖平台的会话缓存机制**：Zed 的 skill 加载在每次触发时读取当前源，无会话级缓存问题。
 

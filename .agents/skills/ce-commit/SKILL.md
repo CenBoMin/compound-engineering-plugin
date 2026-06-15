@@ -96,3 +96,23 @@ EOF
 ### Step 5: Confirm
 
 Run `git status` after the commit to verify success. Report the commit hash(es) and subject line(s).
+
+## Handoff
+
+After confirming the commit, present the next step as numbered options:
+
+```
+1. Push and create PR — route to ce-commit-push-pr
+2. Continue working — route to ce-work
+3. Record learning — route to ce-compound (if there's something worth documenting)
+4. Done for now — end here
+```
+
+Rules:
+
+- **Option 1 should be the default recommendation** when the branch has no existing open PR and the change is complete.
+- **Option 3 should be included only when** the commit addresses a non-trivial bug, reveals a non-obvious insight, or follows a pattern that appears in 3+ locations. Otherwise omit it.
+- When option 3 is omitted, **renumber the remaining options sequentially** (1, 2, 3) so there are no gaps in the option numbers.
+- If the working tree is not clean after the commit (untracked files remain), include a brief note: "Note: untracked files remain in the working tree."
+
+Wait for the user's selection. Execute the chosen route directly.

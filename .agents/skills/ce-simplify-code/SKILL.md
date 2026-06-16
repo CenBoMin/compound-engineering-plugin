@@ -94,3 +94,26 @@ Briefly summarize what was good vs improved and fixed, including which checks we
 - No blocking prompts — reviewers run in the background and return their findings.
 - No local checkout mutations during the review phase.
 - After all three complete, aggregate findings, apply fixes, then run typecheck/lint/tests to verify behavior.
+
+## Handoff
+
+After the summary is complete, present the next step as numbered options:
+
+```
+1. Review the changes — route to ce-code-review
+2. Commit the changes — route to ce-commit
+3. Continue working — route to ce-work to continue implementation
+4. Done for now — end here
+```
+
+Rules:
+
+- **Option 1 should be the default recommendation** when meaningful simplifications were applied (the diff changed non-trivially).
+- **Option 2 should be the default recommendation** when the simplifications were minor or mechanical (formatting, dead code removal, simple rename).
+- If no changes were made (no findings to fix), omit options 1 and 2, and present numbered options:
+  ```
+  1. Continue working — route to ce-work
+  2. Done for now — end here
+  ```
+
+Wait for the user's selection. Execute the chosen route directly.

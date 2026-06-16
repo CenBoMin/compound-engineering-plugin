@@ -117,3 +117,40 @@ gh pr edit   --title "<TITLE>" --body-file "$BODY_FILE"   # existing PR
 
 The quoted sentinel keeps `$VAR`, backticks, and any literal `EOF` inside the body from being expanded.
 For `<TITLE>`: substitute verbatim. If it contains `"`, `` ` ``, `$`, or `\`, escape them or switch to single quotes.
+
+## Handoff
+
+After the PR is created or updated (and the URL has been reported), present the next step as numbered options. In description-only mode, skip the Handoff entirely -- the user asked for a description, not a workflow.
+
+### Default options (full workflow, PR created)
+
+```
+1. Continue working — route to ce-work to start a new feature or continue implementation
+2. Record learning — route to ce-compound (if the PR involved non-trivial debugging or a reusable pattern)
+3. View the PR in browser — open the PR URL for manual review
+4. Done for now — end here
+```
+
+### After updating an existing PR's description
+
+```
+1. Continue working — route to ce-work
+2. Done for now — end here
+```
+
+### After pushing to an existing PR (description not updated)
+
+When the full workflow found an existing PR and the user chose not to update the description, commits were pushed but the PR description is unchanged.
+
+```
+1. Continue working — route to ce-work
+2. Done for now — end here
+```
+
+Rules (applying to the **Default options** section only; other sections define their own option sets with independent numbering):
+
+- **Option 3 (View in browser)** only appears for new PRs (neither description updates nor existing-PR push-only paths). Use `gh pr view --web` to open it.
+- **Option 2 (Record learning)** should be included only when the PR addresses a non-trivial bug, reveals a non-obvious insight, or follows a pattern that appears in 3+ locations. Otherwise omit it.
+- **Option 1 should be the default recommendation** when the PR is just one step in a larger effort.
+
+Wait for the user's selection. Execute the chosen route directly.

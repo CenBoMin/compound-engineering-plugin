@@ -9,6 +9,45 @@ All notable changes to the compound-engineering plugin will be documented in thi
 The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/),
 and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
+## [3.14.0](https://github.com/CenBoMin/compound-engineering-plugin/compare/compound-engineering-v3.13.1...compound-engineering-v3.14.0) (2026-06-20)
+
+
+### Features
+
+* **ce-brainstorm:** add visual feedback to brainstorming process ([#962](https://github.com/CenBoMin/compound-engineering-plugin/issues/962)) ([9be868d](https://github.com/CenBoMin/compound-engineering-plugin/commit/9be868db01cbce7a46cf7a55265846ed0b0d1477))
+* **ce-brainstorm:** grounding scout, claim verifier, tiered dispatch ([#927](https://github.com/CenBoMin/compound-engineering-plugin/issues/927)) ([4fc24ee](https://github.com/CenBoMin/compound-engineering-plugin/commit/4fc24eeb2c4cfc521e66fd18ee1c28c57e962955))
+* **ce-code-review:** add thematic triage grouping ([#845](https://github.com/CenBoMin/compound-engineering-plugin/issues/845)) ([8092abe](https://github.com/CenBoMin/compound-engineering-plugin/commit/8092abead5ab04355f55fb5ccddedfffd28c8901))
+* **ce-ideate:** distill user-supplied research files into dossiers ([#931](https://github.com/CenBoMin/compound-engineering-plugin/issues/931)) ([a82a358](https://github.com/CenBoMin/compound-engineering-plugin/commit/a82a358050bf44781c8f84f9b110702648fff27b))
+* **ce-ideate:** improve for Fable model ([#924](https://github.com/CenBoMin/compound-engineering-plugin/issues/924)) ([622fbfa](https://github.com/CenBoMin/compound-engineering-plugin/commit/622fbfa60de346101e3177af243c79430b189a42))
+* **ce-plan:** approach-altitude plan-for-a-plan with ce-work non-code carve-out ([#905](https://github.com/CenBoMin/compound-engineering-plugin/issues/905)) ([fbd0faf](https://github.com/CenBoMin/compound-engineering-plugin/commit/fbd0fafd9358ab708b15fdc0030615525a0cd684))
+* **ce-promote:** add ce-promote skill for post-ship announcement copy ([#888](https://github.com/CenBoMin/compound-engineering-plugin/issues/888)) ([0939187](https://github.com/CenBoMin/compound-engineering-plugin/commit/09391874b4be1a248bc7d627b0ebd5c29f0c886b))
+* HTML-first ideation docs and a status-free plan model ([#921](https://github.com/CenBoMin/compound-engineering-plugin/issues/921)) ([e74e298](https://github.com/CenBoMin/compound-engineering-plugin/commit/e74e29864fbfa2f800fc3e08509e2966e4947f1e))
+* **skill:** introduce CONCEPTS.md as shared vocabulary substrate ([#838](https://github.com/CenBoMin/compound-engineering-plugin/issues/838)) ([7c4bb16](https://github.com/CenBoMin/compound-engineering-plugin/commit/7c4bb16123412d97ded593fc785d206ecb9684bc))
+
+
+### Bug Fixes
+
+* **ce-brainstorm,ce-plan:** add conceptual-diagram affordance to brainstorm docs ([#871](https://github.com/CenBoMin/compound-engineering-plugin/issues/871)) ([e5e3fc3](https://github.com/CenBoMin/compound-engineering-plugin/commit/e5e3fc3630c026ae0eae6637d8b7a342af862e66))
+* **ce-brainstorm,ce-plan:** restore default-on requirements grouping ([#868](https://github.com/CenBoMin/compound-engineering-plugin/issues/868)) ([5c88212](https://github.com/CenBoMin/compound-engineering-plugin/commit/5c88212c1fd310d27033e7e8508e782e1f19cfdc))
+* **ce-brainstorm:** make visual-probe gate fire reliably before first shape decision ([#964](https://github.com/CenBoMin/compound-engineering-plugin/issues/964)) ([c759a26](https://github.com/CenBoMin/compound-engineering-plugin/commit/c759a26041559360e7b10148dd407406e716fc3b))
+* **ce-compound:** guard validate-frontmatter.py on non-Claude platforms ([#947](https://github.com/CenBoMin/compound-engineering-plugin/issues/947)) ([5e6ecca](https://github.com/CenBoMin/compound-engineering-plugin/commit/5e6eccabb10e46fb2c149d06f82c4f46299e44b5))
+* **ce-compound:** resolve validate-frontmatter.py against skill dir, not project root ([#935](https://github.com/CenBoMin/compound-engineering-plugin/issues/935)) ([6d73857](https://github.com/CenBoMin/compound-engineering-plugin/commit/6d738573e8003cd3e93e3d4d9347c955feca8bd2))
+* **ce-plan:** add answer-seeking disposition to universal planning ([#886](https://github.com/CenBoMin/compound-engineering-plugin/issues/886)) ([ece9fa1](https://github.com/CenBoMin/compound-engineering-plugin/commit/ece9fa1f1f40a267b3ab7c4aa94126e3f5623b09))
+* **ce-plan:** honor explicit external-research requests and route them by intent ([#875](https://github.com/CenBoMin/compound-engineering-plugin/issues/875)) ([b3e396d](https://github.com/CenBoMin/compound-engineering-plugin/commit/b3e396d0bfd7be0c672cb7193a5cfa40675e6979))
+* **ce-polish:** promote from beta to stable ([#880](https://github.com/CenBoMin/compound-engineering-plugin/issues/880)) ([63b6b26](https://github.com/CenBoMin/compound-engineering-plugin/commit/63b6b260c345ba70ce9d9a393eeedefb64e4e0a0))
+* **ce-release-notes:** placeholder links ([#915](https://github.com/CenBoMin/compound-engineering-plugin/issues/915)) ([b625049](https://github.com/CenBoMin/compound-engineering-plugin/commit/b6250490bec4c0488d68ad66d72bd99f6edb95fd))
+* **ce-resolve-pr-feedback:** drop clustering, default to merit-based fixing ([#893](https://github.com/CenBoMin/compound-engineering-plugin/issues/893)) ([3e77a7b](https://github.com/CenBoMin/compound-engineering-plugin/commit/3e77a7bd8450fef7270f8b46c0f1865fd7125741))
+* **ce-resolve-pr-feedback:** fail loudly when repo auto-detection fails ([#908](https://github.com/CenBoMin/compound-engineering-plugin/issues/908)) ([bb0c9ab](https://github.com/CenBoMin/compound-engineering-plugin/commit/bb0c9ab4ee596d546f2965222e0ec8c2a097ae53))
+* **ce-resolve-pr-feedback:** prevent replies landing on wrong PR from GHE node ID mismatch ([#910](https://github.com/CenBoMin/compound-engineering-plugin/issues/910)) ([6f9ab03](https://github.com/CenBoMin/compound-engineering-plugin/commit/6f9ab03a031c054a8046659926251fb6c149269f))
+* **ce-sessions:** emit repo root path instead of basename subshell ([#873](https://github.com/CenBoMin/compound-engineering-plugin/issues/873)) ([253dba8](https://github.com/CenBoMin/compound-engineering-plugin/commit/253dba80dd08c111edae3f7fdc8fac998ec0d5cb))
+* **ce-worktree:** replace bundled-script creator with a portable isolation guardrail ([#948](https://github.com/CenBoMin/compound-engineering-plugin/issues/948)) ([3437de3](https://github.com/CenBoMin/compound-engineering-plugin/commit/3437de3049ea975bceec2688940d696e16cc5f87))
+* **config-read:** read config via native tool, not $() pre-resolution ([#942](https://github.com/CenBoMin/compound-engineering-plugin/issues/942)) ([0757e85](https://github.com/CenBoMin/compound-engineering-plugin/commit/0757e859d21e860a1fc0424bfcbbb35a1e597771))
+* **html-rendering:** constrain measure and surface execution notes ([#870](https://github.com/CenBoMin/compound-engineering-plugin/issues/870)) ([1051132](https://github.com/CenBoMin/compound-engineering-plugin/commit/1051132d04153c3045fc4c929cff32882c6934fe))
+* **lfg:** run ce-simplify-code before review; clarify report-only contract ([#952](https://github.com/CenBoMin/compound-engineering-plugin/issues/952)) ([d8d688b](https://github.com/CenBoMin/compound-engineering-plugin/commit/d8d688b30d97eb5efc3142cec16dd8314ac48e47))
+* **proof:** replace HITL review loop with one-way publish ([#957](https://github.com/CenBoMin/compound-engineering-plugin/issues/957)) ([68dd787](https://github.com/CenBoMin/compound-engineering-plugin/commit/68dd787f98c734f57f6e40f1e8a6e29cb8584719))
+* reduce verbosity and remove HTML comments from generated docs ([#906](https://github.com/CenBoMin/compound-engineering-plugin/issues/906)) ([debc915](https://github.com/CenBoMin/compound-engineering-plugin/commit/debc915c5886a22c049e871304b7f991363e1155))
+* **skills:** enforce content conventions in CI and fix violations ([#930](https://github.com/CenBoMin/compound-engineering-plugin/issues/930)) ([c8e7d90](https://github.com/CenBoMin/compound-engineering-plugin/commit/c8e7d908fa7e230dc8723639ea48498e3e499f3c))
+
 ## [3.13.1](https://github.com/EveryInc/compound-engineering-plugin/compare/compound-engineering-v3.13.0...compound-engineering-v3.13.1) (2026-06-17)
 
 

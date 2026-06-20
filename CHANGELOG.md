@@ -1,5 +1,27 @@
 # Changelog
 
+## [3.14.0](https://github.com/CenBoMin/compound-engineering-plugin/compare/cli-v3.13.1...cli-v3.14.0) (2026-06-20)
+
+
+### Features
+
+* **ce-brainstorm:** add visual feedback to brainstorming process ([#962](https://github.com/CenBoMin/compound-engineering-plugin/issues/962)) ([9be868d](https://github.com/CenBoMin/compound-engineering-plugin/commit/9be868db01cbce7a46cf7a55265846ed0b0d1477))
+* **ce-code-review:** add thematic triage grouping ([#845](https://github.com/CenBoMin/compound-engineering-plugin/issues/845)) ([8092abe](https://github.com/CenBoMin/compound-engineering-plugin/commit/8092abead5ab04355f55fb5ccddedfffd28c8901))
+* **ce-ideate:** improve for Fable model ([#924](https://github.com/CenBoMin/compound-engineering-plugin/issues/924)) ([622fbfa](https://github.com/CenBoMin/compound-engineering-plugin/commit/622fbfa60de346101e3177af243c79430b189a42))
+* HTML-first ideation docs and a status-free plan model ([#921](https://github.com/CenBoMin/compound-engineering-plugin/issues/921)) ([e74e298](https://github.com/CenBoMin/compound-engineering-plugin/commit/e74e29864fbfa2f800fc3e08509e2966e4947f1e))
+* **skill:** introduce CONCEPTS.md as shared vocabulary substrate ([#838](https://github.com/CenBoMin/compound-engineering-plugin/issues/838)) ([7c4bb16](https://github.com/CenBoMin/compound-engineering-plugin/commit/7c4bb16123412d97ded593fc785d206ecb9684bc))
+
+
+### Bug Fixes
+
+* **ce-compound:** guard validate-frontmatter.py on non-Claude platforms ([#947](https://github.com/CenBoMin/compound-engineering-plugin/issues/947)) ([5e6ecca](https://github.com/CenBoMin/compound-engineering-plugin/commit/5e6eccabb10e46fb2c149d06f82c4f46299e44b5))
+* **ce-polish:** promote from beta to stable ([#880](https://github.com/CenBoMin/compound-engineering-plugin/issues/880)) ([63b6b26](https://github.com/CenBoMin/compound-engineering-plugin/commit/63b6b260c345ba70ce9d9a393eeedefb64e4e0a0))
+* **ce-worktree:** replace bundled-script creator with a portable isolation guardrail ([#948](https://github.com/CenBoMin/compound-engineering-plugin/issues/948)) ([3437de3](https://github.com/CenBoMin/compound-engineering-plugin/commit/3437de3049ea975bceec2688940d696e16cc5f87))
+* **config-read:** read config via native tool, not $() pre-resolution ([#942](https://github.com/CenBoMin/compound-engineering-plugin/issues/942)) ([0757e85](https://github.com/CenBoMin/compound-engineering-plugin/commit/0757e859d21e860a1fc0424bfcbbb35a1e597771))
+* **proof:** replace HITL review loop with one-way publish ([#957](https://github.com/CenBoMin/compound-engineering-plugin/issues/957)) ([68dd787](https://github.com/CenBoMin/compound-engineering-plugin/commit/68dd787f98c734f57f6e40f1e8a6e29cb8584719))
+* **release:** bump marketplace catalogs for coding-tutor removal ([#951](https://github.com/CenBoMin/compound-engineering-plugin/issues/951)) ([d4cb8ee](https://github.com/CenBoMin/compound-engineering-plugin/commit/d4cb8eec0db5dc279f1671d3c362022c7617f615))
+* **skills:** enforce content conventions in CI and fix violations ([#930](https://github.com/CenBoMin/compound-engineering-plugin/issues/930)) ([c8e7d90](https://github.com/CenBoMin/compound-engineering-plugin/commit/c8e7d908fa7e230dc8723639ea48498e3e499f3c))
+
 ## [3.13.1](https://github.com/EveryInc/compound-engineering-plugin/compare/cli-v3.13.0...cli-v3.13.1) (2026-06-17)
 
 

@@ -2,6 +2,7 @@
 name: ce-brainstorm
 description: 'Explore requirements and approaches through collaborative dialogue, then write a right-sized requirements document. Use when the user says "let''s brainstorm", "what should we build", or "help me think through X", presents a vague or ambitious feature request, or seems unsure about scope or direction -- even without explicitly asking to brainstorm.'
 argument-hint: "[feature idea or problem to explore] [output:html]"
+target: zed
 ---
 
 # Brainstorm a Feature or Improvement
@@ -34,22 +35,12 @@ These rules apply to every brainstorm, including the universal (non-software) fl
 3. **Use multi-select rarely and intentionally** - Use it only for compatible sets such as goals, constraints, non-goals, or success criteria that can all coexist. If prioritization matters, follow up by asking which selected item is primary.
 4. **Default to the platform's blocking question tool** - Use `AskUserQuestion` in Claude Code (call `ToolSearch` with `select:AskUserQuestion` first if its schema isn't loaded), `request_user_input` in Codex, `ask_user` in Gemini, `ask_user` in Pi (requires the `pi-ask-user` extension). These tools include a free-text fallback, so well-chosen options scaffold the answer without confining it. This default holds for opening and elicitation questions too, not only narrowing. Fall back to numbered options in chat only when no blocking tool exists in the harness (including `ToolSearch` returning no match for it) or the call errors (e.g., Codex edit modes) — not because a schema load is required. Never silently skip the question.
 5. **Use an open-ended question only when the question is genuinely open** - Drop the blocking tool when the answer is inherently narrative, when presented options would steer a diagnostic or introspective answer, or when you cannot write 3-4 genuinely distinct, plausibly-correct options without padding. The test: if you'd be straining to fill the option slots, the question is open — ask it open-ended. Rule 1 still applies: one question per turn.
-6. **Open-ended questions earn their place only when they're specific enough to elicit a substantive answer** - Apply Rule 5 silently: just ask the question, never narrate the form choice. The question must give the user something concrete to anchor on. Good: *"What's the most concrete thing someone's already done about this — paid for it, built a workaround, quit a tool over it?"* — it names what counts as an answer. Too thin: *"What's your take?"* — nothing to bite into, and framings that imply a short answer ("briefly", yes/no) waste the open question the same way.
+6. **Open-ended questions earn their place only when they're specific enough to elicit a substantive answer** - Apply Rule 5 silently: just ask the question, never narrate the form choice. The question must give the user something concrete to anchor on. Good: _"What's the most concrete thing someone's already done about this — paid for it, built a workaround, quit a tool over it?"_ — it names what counts as an answer. Too thin: _"What's your take?"_ — nothing to bite into, and framings that imply a short answer ("briefly", yes/no) waste the open question the same way.
 
 ## Output Guidance
 
 - **Keep outputs concise** - Prefer short sections, brief bullets, and only enough detail to support the next decision.
 - **Use repo-relative paths** - When referencing files, use paths relative to the repo root (e.g., `src/models/user.rb`), never absolute paths. Absolute paths make documents non-portable across machines and teammates.
-
-## Model Tiers
-
-Sub-agent dispatch is tiered by task shape, never hardcoded to a model name:
-
-- **Extraction tier** — the grounding scout: retrieval and quoting work. The platform's cheapest capable model (`model: "haiku"` in Claude Code; the fastest mini-class model in Codex; flash-class in Gemini). "Capable" is part of the spec — escalate to the generation tier when the repo is large or the stack obscure.
-- **Generation tier** — the claim verifier: evidence-driven mechanical verification. The platform's mid-tier model (`model: "sonnet"` in Claude Code; the standard tier in Codex).
-- **Ceiling tier** — the dialogue itself. Questions, approaches, synthesis, and the requirements doc run in the main conversation on the orchestrator's model; nothing is dispatched for them.
-
-**Degradation rule.** When the platform's subagent primitive does not support per-agent model selection, dispatch the scout and verifier on the inherited model and keep their read budgets and output caps — cost control then comes from structure, not tiering. When the platform has no subagent primitive at all, do the topic scan inline at Phase 1.1 — still writing the grounding dossier to the scratch path, because downstream consumers (the Phase 2.6 verifier, the ce-plan handoff) receive that path — and verify claims inline before the Phase 3 write, with the same budgets.
 
 ## Feature Description
 
@@ -88,6 +79,7 @@ The `output:` preference does NOT auto-propagate to `ce-plan` on handoff — ce-
 #### 0.1 Resume Existing Work When Appropriate
 
 If the user references an existing brainstorm topic or document, or there is an obvious recent matching `*-requirements.{md,html}` file in `docs/brainstorms/`:
+
 - Read the document
 - Confirm with the user before resuming: "Found an existing requirements doc for [topic]. Should I continue from this, or start fresh?"
 - If resuming, summarize the current state briefly, continue from its existing decisions and outstanding questions, and update the existing document instead of creating a duplicate
@@ -95,11 +87,12 @@ If the user references an existing brainstorm topic or document, or there is an 
 
 #### 0.1b Classify Task Domain
 
-Before proceeding to Phase 0.2, classify whether this is a software task. The key question is: **does the task involve building, modifying, or architecting software?** -- not whether the task *mentions* software topics.
+Before proceeding to Phase 0.2, classify whether this is a software task. The key question is: **does the task involve building, modifying, or architecting software?** -- not whether the task _mentions_ software topics.
 
 **Software** (continue to Phase 0.2) -- the task references code, repositories, APIs, databases, or asks to build/modify/debug/deploy software.
 
 **Non-software brainstorming** (route to universal brainstorming) -- BOTH conditions must be true:
+
 - None of the software signals above are present
 - The task describes something the user wants to explore, decide, or think through in a non-software domain
 
@@ -110,6 +103,7 @@ Before proceeding to Phase 0.2, classify whether this is a software task. The ke
 #### 0.2 Assess Whether Brainstorming Is Needed
 
 **Clear requirements indicators:**
+
 - Specific acceptance criteria provided
 - Referenced existing patterns to follow
 - Described exact expected behavior
@@ -121,6 +115,7 @@ Keep the interaction brief. Confirm understanding and present concise next-step 
 #### 0.3 Assess Scope
 
 Use the feature description plus a light repo scan to classify the work:
+
 - **Lightweight** - small, well-bounded, low ambiguity
 - **Standard** - normal feature or bounded refactor with some decisions to make
 - **Deep** - cross-cutting, strategic, or highly ambiguous
@@ -144,9 +139,9 @@ Scan the repo before substantive brainstorming. Match depth to scope:
 
 **Standard and Deep** — Two passes:
 
-*Constraint Check (inline)* — Check project instruction files (`AGENTS.md`, and `CLAUDE.md` only if retained as compatibility context) for workflow, product, or scope constraints that affect the brainstorm. Also read `STRATEGY.md` if it exists — the product's target problem, approach, persona, and active tracks are direct input to what this brainstorm should deliver and should shape scope, success criteria, and which approaches are aligned vs out-of-scope. Also read `CONCEPTS.md` at repo root if it exists — the project's authoritative vocabulary. Use these names in dialogue, approaches, and the requirements doc; map user-offered synonyms back. If any of these add nothing, move on. This pass stays in the main conversation — the dialogue needs this material in context to shape its questions.
+_Constraint Check (inline)_ — Check project instruction files (`AGENTS.md`, and `CLAUDE.md` only if retained as compatibility context) for workflow, product, or scope constraints that affect the brainstorm. Also read `STRATEGY.md` if it exists — the product's target problem, approach, persona, and active tracks are direct input to what this brainstorm should deliver and should shape scope, success criteria, and which approaches are aligned vs out-of-scope. Also read `CONCEPTS.md` at repo root if it exists — the project's authoritative vocabulary. Use these names in dialogue, approaches, and the requirements doc; map user-offered synonyms back. If any of these add nothing, move on. This pass stays in the main conversation — the dialogue needs this material in context to shape its questions.
 
-*Topic Scan (grounding scout)* — Create a scratch dir at `/tmp/compound-engineering/ce-brainstorm/<run-id>/` (short unique slug), then dispatch one extraction-tier sub-agent via the platform's subagent primitive (`Agent`/`Task` in Claude Code, `spawn_agent` in Codex, `subagent` in Pi via the `pi-subagents` extension) — in the background where the platform supports it — and proceed to Phase 1.2/1.3 **without waiting**: the scout runs during the user's think-time on the opening questions. Scout prompt:
+_Topic Scan (grounding scout)_ — Create a scratch dir at `/tmp/compound-engineering/ce-brainstorm/<run-id>/` (short unique slug), then dispatch one extraction-tier sub-agent via the platform's subagent primitive (`Agent`/`Task` in Claude Code, `spawn_agent` in Codex, `subagent` in Pi via the `pi-subagents` extension) — in the background where the platform supports it — and proceed to Phase 1.2/1.3 **without waiting**: the scout runs during the user's think-time on the opening questions. Scout prompt:
 
 > Gather grounding for a requirements brainstorm about **{topic}** in this repo. Search first with the native file-search and content-search tools, then read targeted sections — budget ~20 reads, preferring ranges over whole files. Find: whether something similar already exists, the most relevant existing artifacts (brainstorms, plans, specs, feature docs), adjacent examples of similar behavior, and the current state of anything the topic would touch (tables, routes, config, dependencies). Write a **grounding dossier** to `{scratch-dir}/grounding.md`: at most 150 lines of verbatim quotes and short code snippets, each with a `file:line` pointer. Extraction only — quote what the repo says; do not interpret or propose. If the topic has little footprint, write less rather than padding. Return only a gist: 3-5 lines summarizing what the dossier holds, plus its absolute path.
 
@@ -171,6 +166,7 @@ Before generating approaches, scan the user's opening for rigor gaps. Match dept
 This is agent-internal analysis, not a user-facing checklist. Read the opening, note which gaps actually exist, and raise only those as questions during Phase 1.3 — folded into the normal flow of dialogue, not fired as a pre-flight gauntlet. A fuzzy opening may earn three or four probes; a concrete, well-framed one may earn zero because no scope-appropriate gaps were found.
 
 **Lightweight:**
+
 - Is this solving the real user problem?
 - Are we duplicating something that already covers this?
 - Is there a clearly better framing with near-zero extra cost?
@@ -186,12 +182,14 @@ This is agent-internal analysis, not a user-facing checklist. Read the opening, 
 - **Attachment gap.** The opening treats a particular solution shape as the thing being built, rather than the value that shape is supposed to deliver, and hasn't been examined against smaller forms that might deliver the same value. When present, ask what the smallest version that still delivers real value would look like.
 
 Plus these synthesis questions — not gap lenses, product-judgment the agent weighs in its own reasoning:
+
 - Is there a nearby framing that creates more user value without more carrying cost? If so, what complexity does it add?
 - Given the current project state, user goal, and constraints, what is the single highest-leverage move right now: the request as framed, a reframing, one adjacent addition, a simplification, or doing nothing?
 
 Favor moves that compound value, reduce future carrying cost, or make the product meaningfully more useful or compelling. Use the result to sharpen the conversation, not to bulldoze the user's intent.
 
 **Deep** — Standard lenses and synthesis questions plus:
+
 - Is this a local patch, or does it move the broader system toward where it wants to be?
 
 **Deep — product** — Deep plus:
@@ -208,6 +206,7 @@ These questions force an explicit product thesis and feed the Scope Boundaries s
 Follow the Interaction Rules above. Use the platform's blocking question tool when available.
 
 **Guidelines:**
+
 - Ask what the user is already thinking before offering your own ideas. This surfaces hidden context and prevents fixation on AI-generated framings.
 - Start broad (problem, users, value) then narrow (constraints, exclusions, edge cases)
 - **Rigor probes fire before Phase 2 and are open-ended, not menus.** Each scope-appropriate gap found in Phase 1.2 fires as a **separate** direct open-ended probe — one probe satisfies one gap, not multiple. Surface them progressively across the conversation — interleaving with narrowing moves is fine — as long as every gap found in Phase 1.2 has been probed before Phase 2. A menu would signal which kinds of evidence count and let the user pick rather than produce; an open probe forces real observation or surfaces real uncertainty. Each of Phase 1.2's "when present, ask..." lines is the probe; phrase it per Interaction Rule 6. **Attachment is the final rigor probe before Phase 2 when that gap is present — presence is judged from the opening per Phase 1.2, and narrowing having already produced a shape is not a reason to skip it; its job is to pressure-test the user's implicit framing before Phase 2 inherits it.** If a probe's answer reveals genuine uncertainty, record it as an explicit assumption in the requirements document rather than skipping the probe.
@@ -230,11 +229,13 @@ Use at least one non-obvious angle — inversion (what if we did the opposite?),
 Present approaches first, then evaluate. Let the user see all options before hearing which one is recommended — leading with a recommendation before the user has seen alternatives anchors the conversation prematurely.
 
 When useful, include one deliberately higher-upside alternative:
+
 - Identify what adjacent addition or reframing would most increase usefulness, compounding value, or durability without disproportionate carrying cost. Present it as a challenger option alongside the baseline, not as the default. Omit it when the work is already obviously over-scoped or the baseline request is clearly the right move.
 
-At product tier, alternatives should differ on *what* is built (product shape, actor set, positioning), not *how* it is built. Implementation-variant alternatives belong at feature tier.
+At product tier, alternatives should differ on _what_ is built (product shape, actor set, positioning), not _how_ it is built. Implementation-variant alternatives belong at feature tier.
 
 For each approach, provide:
+
 - Brief description (2-3 sentences)
 - Pros and cons
 - Key risks or unknowns
@@ -247,13 +248,14 @@ After presenting all approaches, state your recommendation and explain why. Pref
 If one approach is clearly best and alternatives are not meaningful, skip the menu and state the recommendation directly.
 
 If relevant, call out whether the choice is:
+
 - Reuse an existing pattern
 - Extend an existing capability
 - Build something net new
 
 ### Phase 2.5: Synthesis Summary
 
-**STOP. Before composing the synthesis, read `references/synthesis-summary.md`.** The two-stage shape (internal three-bucket draft → chat-time scoping synthesis), the four scoping synthesis sections with their keep tests, the per-bullet affirmability and detail tests, the tier-aware bullet budget with re-cut rule, anti-pattern guidance, soft-cut behavior, self-redirect support, and internal-draft routing into doc body sections all live there — none of them appear in this main body. Composing a synthesis without these rules loaded reliably produces malformed output: the full internal three-bucket draft pasted verbatim into chat, implementation detail leaking into the scoping synthesis, the proposal-pitch anti-pattern. The Path A / Path B routing below decides only *whether* a confirmation fires — it is not the synthesis spec.
+**STOP. Before composing the synthesis, read `references/synthesis-summary.md`.** The two-stage shape (internal three-bucket draft → chat-time scoping synthesis), the four scoping synthesis sections with their keep tests, the per-bullet affirmability and detail tests, the tier-aware bullet budget with re-cut rule, anti-pattern guidance, soft-cut behavior, self-redirect support, and internal-draft routing into doc body sections all live there — none of them appear in this main body. Composing a synthesis without these rules loaded reliably produces malformed output: the full internal three-bucket draft pasted verbatim into chat, implementation detail leaking into the scoping synthesis, the proposal-pitch anti-pattern. The Path A / Path B routing below decides only _whether_ a confirmation fires — it is not the synthesis spec.
 
 Surface a scoping synthesis to the user before Phase 3 writes the requirements doc — the user's last opportunity to correct scope before the artifact lands. The scoping synthesis is shaped like what two product collaborators would confirm before writing a PRD, not like a comprehensive audit or a one-line preview.
 

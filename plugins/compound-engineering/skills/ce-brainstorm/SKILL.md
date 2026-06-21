@@ -131,8 +131,6 @@ If the scope is unclear, ask one targeted question to disambiguate and then proc
 
 Product-tier triggers additional Phase 1.2 questions and additional sections in the requirements document. Feature-tier uses the current Deep behavior unchanged.
 
-**Visual probe tripwire.** If the feature is inherently visual or spatial — drawing/canvas tools, annotation behavior, visual editors, UI layout or navigation, interaction states, charts, diagrams, animation, maps, timelines, or spatial flows — read `references/visual-probes.md` now and remember that a visual-probe gate is pending. Strong signals include freehand vs constrained drawing behavior, canvas annotation tools, layout comparisons, and state/flow placement. Loading the reference here is readiness only; do not offer the visual path until the first concrete shape/behavior decision. If the user later chooses visual, run the helper at `scripts/visual-probe-server.js` by resolving it relative to this loaded `ce-brainstorm` skill directory; if the runtime does not expose a concrete skill directory, do not guess from the project CWD — use the text path.
-
 ### Phase 1: Understand the Idea
 
 #### 1.1 Existing Context Scan
@@ -219,7 +217,6 @@ Follow the Interaction Rules above. Use the platform's blocking question tool wh
 - Surface dependencies or prerequisites only when they materially affect scope
 - Resolve product decisions here; leave technical implementation choices for planning
 - Bring ideas, alternatives, and challenges instead of only interviewing
-- **Visual-probe gate.** Before asking the first concrete behavior, shape, state, layout, flow, or diagram question for an inherently visual topic, offer the text-vs-visual choice from `references/visual-probes.md` once. Use the platform's blocking question tool for this text-vs-visual opt-in when available; fall back to a plain chat question only when no interactive question tool exists or the tool errors. This gate takes precedence over the default blocking-question path for the substantive decision: do not ask the shape/behavior question directly as an `AskUserQuestion`/`request_user_input` menu until the user declines visual, or until visual feedback returns to chat. An ASCII preview or text mockup inside an interactive question choice does not satisfy the visual-probe offer for genuinely spatial behavior. If the user chooses text, continue in chat without penalty or repeated nudging. If they choose visual, create the cheapest display-only visual probe that answers that decision, then use the platform's blocking question tool for bounded post-artifact feedback when available. The browser artifact remains display-only.
 
 **Before exiting Phase 1.3: integration check.** Mentally combine what the user has said so far and surface any non-obvious consequences the dialogue hasn't probed. If user-stated X plus user-stated Y plus your-default-Z produces a downstream effect the user is unlikely to have tracked through one-question-at-a-time dialogue ("if mute lives on the rule AND we don't warn on delete, then rule-delete silently loses pause state"), probe it now while you're still in dialogue. One probe per genuine combination effect, asked open-ended, same discipline as rigor probes. Phase 2.5's call-outs are a safety net for residuals (silent agent inferences, pre-loaded contexts with no dialogue) — NOT a punt list for consequences you could have asked about now.
 
@@ -233,7 +230,7 @@ Use at least one non-obvious angle — inversion (what if we did the opposite?),
 
 Present approaches first, then evaluate. Let the user see all options before hearing which one is recommended — leading with a recommendation before the user has seen alternatives anchors the conversation prematurely.
 
-If approach differences are spatial, behavioral, or otherwise visual enough that prose would be slower or lower-fidelity, use `references/visual-probes.md` before presenting the choice. For inherently visual topics caught by the Phase 0.3 visual-probe tripwire, this is a gate before the first approach choice about behavior, shape, state, layout, flow, or diagrams; do not substitute an ASCII preview in a blocking question for the visual offer. The visual path remains opt-in and display-only; text remains a first-class path.
+If approach differences are spatial, behavioral, or otherwise visual enough that prose would be slower or lower-fidelity, consider using a lightweight visual sketch or diagram before presenting the choice. The visual path remains opt-in and display-only; text remains a first-class path.
 
 When useful, include one deliberately higher-upside alternative:
 
